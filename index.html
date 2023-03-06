@@ -13,18 +13,31 @@
 		></script>
 	</head>
 	<body>
-        Redirecionando
-    </body>
+		Redirecting
+	</body>
 
-    <script>
-        (async () => {
-            const microsoftTeams = window.microsoftTeams;
-            try {
-                await window.microsoftTeams.app.initialize();
-            } catch (error) {
-                console.error(error);
-                document.body.innerHTML = "Microsoft Teams SDK Initialize Error!"
-            }
-        })
-    </script>
+	<script>
+		async () => {
+			try {
+				const params = new Proxy(new URLSearchParams(window.location.search), {
+					get: (searchParams, prop) => searchParams.get(prop),
+				});
+				if (typeof params.url !== "string") {
+					throw new Error("Microsoft Teams SDK Initialize Error!");
+				}
+
+				window.open(params.url, "_blank");
+
+				const microsoftTeams = window.microsoftTeams;
+				try {
+					await window.microsoftTeams.app.initialize();
+					await window.microsoftTeams.pages.navigateBack();
+				} catch (error) {
+					window.history.back();
+				}
+			} catch (error) {
+				document.body.innerHTML = error.message;
+			}
+		};
+	</script>
 </html>
