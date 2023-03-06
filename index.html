@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Redirect Teams Web</title>
+
+		<script
+			src="https://res.cdn.office.net/teams-js/2.9.1/js/MicrosoftTeams.min.js"
+			integrity="sha384-xnsUQ1tUqsrutBJl0vuf4/hufzLFWW8ZhGnhItfpQ0/BtWgM2uw6YT6BQ5YaKBSM"
+			crossorigin="anonymous"
+		></script>
+	</head>
+	<body>
+        Redirecionando
+    </body>
+
+    <script>
+        (async () => {
+            const microsoftTeams = window.microsoftTeams;
+            try {
+                await window.microsoftTeams.app.initialize();
+            } catch (error) {
+                console.error(error);
+                document.body.innerHTML = "Microsoft Teams SDK Initialize Error!"
+            }
+        })
+    </script>
+</html>
