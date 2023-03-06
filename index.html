@@ -17,7 +17,7 @@
 	</body>
 
 	<script>
-		(async () => {
+		async function run () {
 			try {
 				const params = new Proxy(new URLSearchParams(window.location.search), {
 					get: (searchParams, prop) => searchParams.get(prop),
@@ -26,18 +26,25 @@
 					throw new Error("Microsoft Teams SDK Initialize Error!");
 				}
 
-				window.open(params.url, "_blank");
+				const newWin = window.open(params.url, "_blank");
+
+				if (!newWin || newWin.closed || typeof newWin.closed == "undefined") {
+					throw new Error(`Pop-up blocked, <a href="${params.url}" target="_blank">click here to open</a>`);
+				}
 
 				const microsoftTeams = window.microsoftTeams;
 				try {
 					await window.microsoftTeams.app.initialize();
-					await window.microsoftTeams.pages.navigateBack();
+					await window.microsoftTeams.pages.backStack.navigateBack();
+					console.log(window.microsoftTeams);
 				} catch (error) {
+					console.error(error);
 					window.history.back();
 				}
 			} catch (error) {
 				document.body.innerHTML = error.message;
 			}
-		})();
+		};
+		run();
 	</script>
 </html>
